@@ -1,12 +1,12 @@
 name: "[release hook] Check commit messages"
 
 on:
-  pull_request:
+  pull_request_target:
     types: [opened, edited, synchronize, reopened]
 
 jobs:
   release-check-commits:
-    if: ${{ github.repository == 'dazuma/toys' }}
+    if: ${{ github.repository == 'dazuma/toys-test' }}
     env:
       ruby_version: "2.7"
     runs-on: ubuntu-latest
@@ -17,6 +17,8 @@ jobs:
           ruby-version: ${{ env.ruby_version }}
       - name: Checkout repo
         uses: actions/checkout@v2
+        with:
+          ref: refs/pull/${{ github.event.pull_request.number }}/merge
       - name: Install Toys
         run: "gem install --no-document toys"
       - name: Check commit messages
